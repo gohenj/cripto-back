@@ -1,0 +1,77 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model User {
+  id           String        @id @default(uuid())
+  email        String        @unique
+  passwordHash String
+  createdAt    DateTime      @default(now())
+  
+
+  wallets      Wallet[]
+  transactions Transaction[]
+  movements    Movement[]
+}
+
+
+model Wallet {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  token     String   // Aqui vai entrar "BRL", "BTC" ou "ETH"
+  balance   Decimal  @default(0.0) // Começa com saldo zero
+  updatedAt DateTime @updatedAt
+
+  
+  @@unique([userId, token]) 
+}
+
+// 3. Tabela de Transações (O evento principal)
+model Transaction {
+  id             String     @id @default(uuid())
+  userId         String
+  user           User       @relation(fields: [userId], references: [id])
+  type           TxType     
+  idempotencyKey String?    @unique 
+  createdAt      DateTime   @default(now())
+  
+  movements      Movement[]
+}
+
+
+model Movement {
+  id            String      @id @default(uuid())
+  transactionId String
+  transaction   Transaction @relation(fields: [transactionId], references: [id])
+  userId        String
+  user          User        @relation(fields: [userId], references: [id])
+  type          MovType     
+  token         String
+  amount        Decimal
+  oldBalance    Decimal
+  newBalance    Decimal
+  createdAt     DateTime    @default(now())
+}
+
+
+enum TxType {
+  DEPOSIT
+  SWAP
+  WITHDRAWAL
+}
+
+enum MovType {
+  DEPOSIT
+  SWAP_IN
+  SWAP_OUT
+  SWAP_FEE
+  WITHDRAWAL
+}

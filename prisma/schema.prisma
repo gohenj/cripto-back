@@ -34,7 +34,6 @@ model Wallet {
   @@unique([userId, token]) 
 }
 
-// 3. Tabela de Transações (O evento principal)
 model Transaction {
   id             String     @id @default(uuid())
   userId         String

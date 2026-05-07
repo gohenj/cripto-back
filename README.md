@@ -51,7 +51,7 @@ A arquitetura foi desenhada para garantir total rastreabilidade (Ledger):
 
 1. **Clone o repositório:**
    ```bash
-   git clone <URL_DO_SEU_REPOSITORIO>
+   git clone <https://github.com/gohenj/nexus-cripto.git>
    cd nexus-backend
 
 2. **Instale as dependências:**
@@ -61,12 +61,14 @@ A arquitetura foi desenhada para garantir total rastreabilidade (Ledger):
 3. **Configuração de Variáveis de Ambiente:**
     Crie um arquivo .env na raiz do projeto com as seguintes variáveis:
     ´´´Snippet de código
-    DATABASE_URL="postgresql://usuario:senha@host:porta/banco"
+    DATABASE_URL= postgresql://postgres:MADARA1974m$@db.srdovqgsdrtagefazoau.supabase.co:6543/postgres
 
 4. **Sincronize o Banco de Dados:**
-    Execute o Prisma para criar a estrutura de tabelas no PostgreSQL:
     ´´´bash
     npx prisma db push
+
+    Execute o Prisma para criar a estrutura de tabelas no PostgreSQL:
+
 
 5. **Inicie o codigo**
     ´´´bash

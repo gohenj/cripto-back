@@ -535,6 +535,5 @@ app.get("/ping", async (request, reply) => {
   return { message: "Servidor da Carteira Cripto rodando 100%!" };
 });
 
-app.listen({ port: 3333 }, () => {
-  console.log("🚀 Servidor rodando em http://localhost:3333");
-});
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Rodando na porta ${PORT}`));

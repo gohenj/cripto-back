@@ -27,8 +27,14 @@ app.post("/register", async (request, reply) => {
       .regex(/[\W_]/, "A senha precisa ter pelo menos um caractere especial (@, !, $, etc)"),
   });
 
+  const parsedData = registerSchema.safeParse(request.body);
+
+  if (!parsedData.success) {
+    return reply.status(400).send({ error: parsedData.error.errors[0].message });
+  }
+
+  const { email, password } = parsedData.data;
   
-  const { email, password } = registerSchema.parse(request.body);
 
   
   const userExists = await prisma.user.findUnique({

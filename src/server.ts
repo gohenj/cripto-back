@@ -104,6 +104,26 @@ app.post("/login", async (request, reply) => {
   
   const refreshToken = app.jwt.sign({ sub: user.id }, { expiresIn: "7d" });
 
+const bonusTx = await prisma.transaction.create({
+    data: {
+      userId: user.id,
+      type: "DEPOSIT",
+      idempotencyKey: `bonus-registro-${user.id}` 
+    },
+  });
+
+  await prisma.movement.create({
+    data: {
+      transactionId: bonusTx.id,
+      userId: user.id,
+      type: "DEPOSIT",
+      token: "BRL",
+      amount: 5000,
+      oldBalance: 0,
+      newBalance: 5000,
+    },
+  });
+
   return reply.status(200).send({
     accessToken,
     refreshToken,

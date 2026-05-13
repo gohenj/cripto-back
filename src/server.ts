@@ -19,7 +19,12 @@ app.post("/register", async (request, reply) => {
 
   const registerSchema = z.object({
     email: z.string().email("Formato de e-mail inválido"),
-    password: z.string().min(6, "A senha precisa ter no mínimo 6 caracteres"),
+    password: z.string()
+      .min(8, "A senha precisa ter no mínimo 8 caracteres")
+      .regex(/[A-Z]/, "A senha precisa ter pelo menos uma letra maiúscula")
+      .regex(/[a-z]/, "A senha precisa ter pelo menos uma letra minúscula")
+      .regex(/[0-9]/, "A senha precisa ter pelo menos um número")
+      .regex(/[\W_]/, "A senha precisa ter pelo menos um caractere especial (@, !, $, etc)"),
   });
 
   
@@ -44,7 +49,7 @@ app.post("/register", async (request, reply) => {
       passwordHash,
       wallets: {
         create: [
-          { token: "BRL", balance: 0 },
+          { token: "BRL", balance: 5000 },
           { token: "BTC", balance: 0 },
           { token: "ETH", balance: 0 },
         ],

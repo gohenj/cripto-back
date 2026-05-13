@@ -30,9 +30,9 @@ app.post("/register", async (request, reply) => {
   const parsedData = registerSchema.safeParse(request.body);
 
   if (!parsedData.success) {
-    return reply.status(400).send({ error: parsedData.error.errors[0].message });
+    const errorMessage = parsedData.error.issues?.[0]?.message || "Dados inválidos para o cadastro.";
+    return reply.status(400).send({ error: errorMessage });
   }
-
   const { email, password } = parsedData.data;
   
 
@@ -55,7 +55,7 @@ app.post("/register", async (request, reply) => {
       passwordHash,
       wallets: {
         create: [
-          { token: "BRL", balance: 5000 },
+          { token: "BRL", balance: 5000.00 },
           { token: "BTC", balance: 0 },
           { token: "ETH", balance: 0 },
         ],
